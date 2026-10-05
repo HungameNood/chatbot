@@ -82,4 +82,19 @@ app.post('/chat', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(// Endpoint nhận Webhook callback từ Dialogflow Fulfillment
+app.post('/webhook', (req, res) => {
+    const intentName = req.body.queryResult?.intent?.displayName;
+
+    // Ví dụ: Xử lý phản hồi tùy chỉnh cho từng Intent
+    let replyText = "Đã nhận phản hồi từ Webhook Backend!";
+
+    if (intentName === 'LS_BachDang938') {
+        replyText = "Trận Bạch Đằng năm 938 do Ngô Quyền lãnh đạo đã đánh tan quân Nam Hán!";
+    }
+
+    // Trả về định dạng JSON chuẩn của Dialogflow Fulfillment
+    return res.json({
+        fulfillmentText: replyText
+    });
+});
